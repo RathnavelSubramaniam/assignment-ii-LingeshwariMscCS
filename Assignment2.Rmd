@@ -1,0 +1,69 @@
+---
+title: "Assignment 2"
+author: "LINGESHWARI  M"
+date: "2024-08-03"
+output: html_document
+---
+
+```{r}
+library(MASS)
+```
+
+
+```{r}
+data("Boston")
+```
+
+```{r}
+set.seed(1) 
+x <- rnorm(100)
+```
+
+
+```{r}
+eps <- rnorm(100, mean = 0, sd = sqrt(0.25))
+```
+
+
+```{r}
+y <- -1 + 0.5 * x + eps
+length(y)
+```
+
+```{r}
+plot(x, y, main = "Scatterplot of x vs y", xlab = "x", ylab = "y", pch = 19)
+```
+
+```{r}
+model <- lm(y ~ x)
+summary(model)
+```
+
+
+```{r}
+plot(x, y, main = "Scatterplot with Regression Lines", xlab = "x", ylab = "y", pch = 19)
+abline(model, col = "blue", lwd = 2)
+abline(-1, 0.5, col = "red", lwd = 2, lty = 2)
+legend("topleft", legend = c("Least Squares Line", "Population Regression Line"),
+       col = c("blue", "red"), lty = c(1, 2), lwd = 2)
+```
+
+```{r}
+predictors <- colnames(Boston)[-1] 
+results <- lapply(predictors, function(predictor) {
+  formula <- as.formula(paste("crim ~", predictor))
+  model <- lm(formula, data = Boston)
+  summary(model)
+
+})
+
+```
+
+```{r}
+full_model <- lm(crim ~ ., data = Boston)
+summary(full_model)
+significant_predictors_full <- summary(full_model)$coefficients[, 4] < 0.05
+significant_predictors_full
+
+```
+
